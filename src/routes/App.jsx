@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 import '../assets/styles/App.css'
 import Logueado from '../components/Logueado';
 import Deslogueado from '../components/Deslogueado';
+import { AuthProvider, useAuth } from '../context/Contexto';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, onValue, onChildAdded, set, push, update, onChildChanged, onChildRemoved, onChildMoved } from "firebase/database";
+import { getDatabase, ref, onValue, onChildAdded, set, push, update, onChildChanged, onChildRemoved, onChildMoved, get } from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -52,25 +53,25 @@ function App() {
     onChildAdded(referenciaDirecta, (snapshot) => {
       const data = snapshot.val();
         //setPokemones(data)
-        console.log("Pokemones desde OnChildAdded", data)
+        //console.log("Pokemones desde OnChildAdded", data)
     });
 
     onChildChanged(referenciaDirecta, (snapshot) => {
       const data = snapshot.val();
         //setPokemones(data)
-        console.log("Pokemones desde onChildChanged", data)
+        //console.log("Pokemones desde onChildChanged", data)
     });
 
     onChildRemoved(referenciaDirecta, (snapshot) => {
       const data = snapshot.val();
         //setPokemones(data)
-        console.log("Pokemones desde onChildRemoved", data)
+        //console.log("Pokemones desde onChildRemoved", data)
     });
 
     onChildMoved(referenciaDirecta, (snapshot) => {
       const data = snapshot.val();
         //setPokemones(data)
-        console.log("Pokemones desde onChildMoved", data)
+        //console.log("Pokemones desde onChildMoved", data)
     });
   },[])
 
@@ -101,13 +102,19 @@ function App() {
         setLog(false)
       }
     });
+
+    const comprobarLibro = async () => {
+      const referencia = ref(db, 'libro');
+      const snapshot = await get(referencia);
+      return snapshot.exists();
+    };
   
 
   return (
     <>
       <h1>Hola desde la clase de Firebase</h1>
       <h2>{pokemones?.name}</h2>
-      {!log ? <Deslogueado policia={setLog} guardarUsuario={guardarUsuario}></Deslogueado> : <Logueado policia={setLog} usuario={log}></Logueado> }
+      {!log ? <Deslogueado policia={setLog} guardarUsuario={guardarUsuario} comprobarLibro={comprobarLibro}></Deslogueado> : <Logueado policia={setLog} usuario={log} comprobarLibro={comprobarLibro}></Logueado> }
     </>
   )
 }

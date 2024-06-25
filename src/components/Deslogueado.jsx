@@ -7,7 +7,7 @@ function Deslogueado(props) {
     const [usuario, setUsuario] = useState("");
     const [pass, setPass] = useState("");
     const [mensaje, setMensaje] = useState("");
-    const { policia, guardarUsuario } = props;
+    const { policia, guardarUsuario, comprobarLibro } = props;
     const auth = getAuth();
     const db = getDatabase();
 
